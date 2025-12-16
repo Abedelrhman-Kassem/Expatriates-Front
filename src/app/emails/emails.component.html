@@ -1,0 +1,97 @@
+<section class="bg-white gray-900">
+  <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
+    <h2 class="mb-4 text-xl font-bold text-gray-900">إرسال بريد إلكتروني</h2>
+  </div>
+  <form (submit)="sendRequest()" [formGroup]="form" autocomplete="off">
+    <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+      <app-input
+        id="name"
+        placeholder=""
+        label="الاسم"
+        (valueChange)="onInputChange($event, 'name')"
+      />
+
+      <app-input
+        id="code"
+        placeholder=""
+        label="الكود"
+        (valueChange)="onInputChange($event, 'code')"
+      />
+
+      <app-input
+        id="submissionNumber"
+        placeholder=""
+        label="رقم الطلب"
+        (valueChange)="onInputChange($event, 'submissionNumber')"
+      />
+
+      <app-input
+        id="passportNumber"
+        placeholder=""
+        label="رقم جواز السفر"
+        (valueChange)="onInputChange($event, 'passportNumber')"
+      />
+
+      <app-select-input
+        id="nationality"
+        label="الجنسيه"
+        [options]="countries()"
+        (valueChange)="onInputChange($event, 'nationality')"
+      />
+
+      <app-select-input
+        id="gender"
+        label="النوع"
+        [options]="genderValues"
+        (valueChange)="onInputChange($event, 'gender')"
+      />
+    </div>
+    <div class="m-16">
+      <label for="subject">عنوان الرسالة</label>
+      <input
+        type="text"
+        name="subject"
+        id="subject"
+        formControlName="subject"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 placeholder-gray-300 gray-700 my-5"
+      />
+      @if (form.get('subject')?.invalid && (form.get('subject')?.dirty ||
+      form.get('subject')?.touched)) {
+      <div class="alert mt-1">
+        @if (form.get('subject')?.hasError('required')) {
+
+        <p class="text-red-500 text-xs italic">قم بإدخال قيمه لهذا الحقل</p>
+        } @if(form.get('subject')?.hasError('email')) {
+        <p class="text-red-500 text-xs italic">البريد الالكتروني غير صحيح</p>
+        }
+      </div>
+      }
+
+      <label for="info">محتوى الرسالة</label>
+      <textarea
+        name="info"
+        id="info"
+        formControlName="info"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 placeholder-gray-300 gray-700 my-5"
+      ></textarea>
+      @if (form.get('info')?.invalid && (form.get('info')?.dirty ||
+      form.get('info')?.touched)) {
+      <div class="alert mt-1">
+        @if (form.get('info')?.hasError('required')) {
+
+        <p class="text-red-500 text-xs italic">قم بإدخال قيمه لهذا الحقل</p>
+        } @if(form.get('info')?.hasError('email')) {
+        <p class="text-red-500 text-xs italic">البريد الالكتروني غير صحيح</p>
+        }
+      </div>
+      }
+    </div>
+
+    <button
+      type="submit"
+      class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer my-5"
+    >
+      إرسال
+    </button>
+  </form>
+</section>

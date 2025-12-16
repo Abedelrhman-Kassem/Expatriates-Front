@@ -1,0 +1,15 @@
+@if(isSuperAdmin()) {
+<a
+  [routerLink]="['create-admin']"
+  routerLinkActive="router-link-active"
+  class="block w-fit mb-4 px-6 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200 shadow hover:cursor-pointer"
+>
+  إنشاء مستخدم جديد
+</a>
+}
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+  @for (user of users(); track $index) {
+  <app-user-card [user]="user" />
+  }
+</div>

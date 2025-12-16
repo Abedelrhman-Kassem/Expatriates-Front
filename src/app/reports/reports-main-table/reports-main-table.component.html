@@ -1,0 +1,30 @@
+<div class="relative overflow-x-auto">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 gray-700">
+      <tr>
+        <th scope="col" class="px-6 py-3">الاسم</th>
+        <th scope="col" class="px-6 py-3">الكود</th>
+        <th scope="col" class="px-6 py-3">رقم الطلب</th>
+        <th scope="col" class="px-6 py-3">رقم جواز السفر</th>
+        <th scope="col" class="px-6 py-3">الجنسية</th>
+        <th scope="col" class="px-6 py-3">النوع</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of reportsArray(); track $index) {
+
+      <tr
+        class="bg-white border-b gray-800 border-gray-700 hover:bg-gray-50 hover:cursor-pointer"
+        [routerLink]="['studentInfo/', item.id]"
+      >
+        <td class="px-6 py-4">{{ item.name }}</td>
+        <td class="px-6 py-4">{{ item.code }}</td>
+        <td class="px-6 py-4">{{ item.submissionNumber }}</td>
+        <td class="px-6 py-4">{{ item.passportNumber }}</td>
+        <td class="px-6 py-4">{{ item.nationality }}</td>
+        <td class="px-6 py-4">{{ item.gender }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

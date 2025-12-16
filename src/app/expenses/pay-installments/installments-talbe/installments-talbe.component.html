@@ -1,0 +1,67 @@
+<div class="relative overflow-x-auto mb-10">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 gray-700">
+      <tr>
+        <th scope="col" class="px-6 py-3">{{ requirement().grade }}</th>
+        <th scope="col" class="px-6 py-3">
+          {{ requirement().admissionYear }}
+        </th>
+        <th scope="col" class="px-6 py-3">{{ requirement().amount }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of installmentsArray; track $index) {
+
+      <tr class="bg-white border-b gray-800 border-gray-700">
+        <td class="px-6 py-4">{{ item.title || "title" }}</td>
+        <td class="px-6 py-4">{{ item.amount }}</td>
+        <td class="px-6 py-4">{{ item.operationNumber }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (installments().length < 2) {
+<form (submit)="sendRequest()" [formGroup]="form">
+  <div class="mb-20">
+    <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+      <app-select-input
+        id="title"
+        label="القسط"
+        [options]="installmentTitles"
+        (valueChange)="onInputChange($event, 'title')"
+        [control]="getControl('title')"
+      />
+
+      <app-input
+        id="amount"
+        label="المبلغ"
+        placeholder=""
+        (valueChange)="onInputChange($event, 'amount')"
+        [control]="getControl('amount')"
+      />
+
+      <app-input
+        id="operationNumber"
+        label="رقم العملية"
+        placeholder=""
+        (valueChange)="onInputChange($event, 'operationNumber')"
+        [control]="getControl('operationNumber')"
+      />
+    </div>
+
+    @if (isLoading) {
+    <app-loading-spinner />
+    } @else {
+
+    <button
+      type="submit"
+      class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer my-5"
+    >
+      سداد القسط
+    </button>
+    }
+  </div>
+</form>
+}

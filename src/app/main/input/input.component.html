@@ -1,0 +1,26 @@
+<div class="w-full">
+  <label [for]="id()" class="block mb-2 text-sm font-medium">{{
+    label()
+  }}</label>
+  <input
+    (input)="onInputChange($event)"
+    [id]="id()"
+    [name]="id()"
+    [type]="type()"
+    minlength="1"
+    [formControl]="control()"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 gray-700 placeholder-gray-400 focus:ring-cyan-500 focus:border-cyan-500"
+    placeholder="{{ placeholder() }}"
+    autoComplete="off"
+  />
+</div>
+@if (control().invalid && (control().dirty || control().touched)) {
+<div class="alert mt-1">
+  @if (control().hasError('required')) {
+
+  <p class="text-red-500 text-xs italic">قم بإدخال قيمه لهذا الحقل</p>
+  } @if(control().hasError('email')) {
+  <p class="text-red-500 text-xs italic">البريد الالكتروني غير صحيح</p>
+  }
+</div>
+}

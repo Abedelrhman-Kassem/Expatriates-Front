@@ -1,0 +1,204 @@
+<section class="bg-white">
+  <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
+    <h2 class="mb-4 text-xl font-bold">إضافة طالب جديد</h2>
+    <form (submit)="sendRequest()" [formGroup]="form" autocomplete="off">
+      <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+        <app-input
+          id="name"
+          placeholder=""
+          label="الاسم"
+          (valueChange)="onInputChange($event, 'name')"
+          [control]="getControl('name')"
+        />
+
+        <app-input
+          id="submissionNumber"
+          placeholder=""
+          label="رقم الطلب"
+          (valueChange)="onInputChange($event, 'submissionNumber')"
+          [control]="getControl('submissionNumber')"
+        />
+
+        <app-select-input
+          id="nationality"
+          label="الجنسيه"
+          [options]="countries()"
+          (valueChange)="onInputChange($event, 'nationality')"
+          [control]="getControl('nationality')"
+        />
+
+        <app-input
+          id="passportNumber"
+          placeholder=""
+          label="رقم جواز السفر"
+          (valueChange)="onInputChange($event, 'passportNumber')"
+          [control]="getControl('passportNumber')"
+        />
+
+        <app-input
+          id="idNumber"
+          placeholder=""
+          label="رقم الهويه"
+          (valueChange)="onInputChange($event, 'idNumber')"
+          [control]="getControl('idNumber')"
+        />
+
+        <app-select-input
+          id="college"
+          label="الكليه"
+          [options]="collegeValues"
+          (valueChange)="onInputChange($event, 'college')"
+          [control]="getControl('college')"
+        />
+
+        <app-select-input
+          id="gender"
+          label="النوع"
+          [options]="genderValues"
+          (valueChange)="onInputChange($event, 'gender')"
+          [control]="getControl('gender')"
+        />
+
+        <app-select-input
+          id="certificateCountry"
+          label="دولة الشهاده"
+          [options]="countries()"
+          (valueChange)="onInputChange($event, 'certificateCountry')"
+          [control]="getControl('certificateCountry')"
+        />
+
+        <app-select-input
+          id="admissionYear"
+          label="عام الالتحاق"
+          [options]="admissionYearValues"
+          (valueChange)="onInputChange($event, 'admissionYear')"
+          [control]="getControl('admissionYear')"
+        />
+
+        <app-select-input
+          id="studentStatus"
+          label="حالة الطالب"
+          [options]="studentStatusValues"
+          (valueChange)="onInputChange($event, 'studentStatus')"
+          [control]="getControl('studentStatus')"
+        />
+
+        <app-select-input
+          id="exemptionStatus"
+          label="موقف الطالب من الرسوم"
+          [options]="exemptionStatusValues"
+          (valueChange)="onInputChange($event, 'exemptionStatus')"
+          [control]="getControl('exemptionStatus')"
+        />
+
+        <app-input
+          id="major"
+          placeholder=""
+          label="التخصص"
+          (valueChange)="onInputChange($event, 'major')"
+          [control]="getControl('major')"
+        />
+
+        <app-input
+          id="birthDate"
+          placeholder=""
+          label="تاريخ الميلاد"
+          type="date"
+          (valueChange)="onInputChange($event, 'birthDate')"
+          [control]="getControl('birthDate')"
+        />
+
+        <app-input
+          id="placeOfResidence"
+          placeholder=""
+          label="محل الإقامه"
+          (valueChange)="onInputChange($event, 'placeOfResidence')"
+          [control]="getControl('placeOfResidence')"
+        />
+
+        <app-input
+          id="email"
+          placeholder=""
+          label="البريد الإلكتروني"
+          (valueChange)="onInputChange($event, 'email')"
+          [control]="getControl('email')"
+        />
+
+        <app-input
+          id="whatsNumber"
+          placeholder=""
+          label="رقم الواتس"
+          (valueChange)="onInputChange($event, 'whatsNumber')"
+          [control]="getControl('whatsNumber')"
+        />
+
+        <app-input
+          id="number"
+          placeholder=""
+          label="رقم الموبايل"
+          (valueChange)="onInputChange($event, 'number')"
+          [control]="getControl('number')"
+        />
+
+        <app-select-input
+          id="requestType"
+          label="نوع الطلب"
+          [options]="requestTypeValues"
+          (valueChange)="onInputChange($event, 'requestType')"
+          [control]="getControl('requestType')"
+        />
+
+        <app-select-input
+          id="applicationType"
+          label="نوع البرنامج"
+          [options]="applicationTypeValues"
+          (valueChange)="onInputChange($event, 'applicationType')"
+          [control]="getControl('applicationType')"
+        />
+
+        <app-input
+          id="educationStage"
+          placeholder=""
+          label="المرحله الدراسيه"
+          (valueChange)="onInputChange($event, 'educationStage')"
+          [control]="getControl('educationStage')"
+        />
+
+        <app-select-input
+          id="educationType"
+          label="نوع الدراسة"
+          [options]="educationTypeValues"
+          (valueChange)="onInputChange($event, 'educationType')"
+          [control]="getControl('educationType')"
+        />
+
+        <app-select-input
+          id="formatType"
+          label="نوع التنسيق"
+          [options]="formatTypeValues"
+          (valueChange)="onInputChange($event, 'formatType')"
+          [control]="getControl('formatType')"
+        />
+
+        <app-input
+          id="percentage"
+          placeholder=""
+          label="النسبه المئويه"
+          (valueChange)="onInputChange($event, 'percentage')"
+          [control]="getControl('percentage')"
+        />
+      </div>
+      @if (isLoading()) {
+
+      <app-loading-spinner />
+      } @else {
+      <button
+        type="submit"
+        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-900 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer"
+      >
+        إضاقه
+      </button>
+      }
+    </form>
+  </div>
+</section>

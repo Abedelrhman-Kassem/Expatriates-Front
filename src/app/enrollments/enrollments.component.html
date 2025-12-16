@@ -1,0 +1,85 @@
+<section class="bg-white gray-900">
+  <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
+    <h2 class="mb-4 text-xl font-bold text-gray-900">تقييد الطلاب</h2>
+  </div>
+  <form (submit)="sendRequest()" autocomplete="off">
+    <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+      <app-input
+        id="passportNumber"
+        placeholder=""
+        label="رقم جواز السفر"
+        (valueChange)="onInputChange($event, 'passportNumber')"
+      />
+
+      <app-input
+        id="submissionNumber"
+        placeholder=""
+        label="رقم الطلب"
+        (valueChange)="onInputChange($event, 'submissionNumber')"
+      />
+
+      <!-- <app-input
+      id="code"
+      placeholder=""
+      label="الكود الجامعى"
+      (valueChange)="onInputChange($event, 'code')"
+      /> -->
+    </div>
+
+    <hr class="my-10" />
+
+    <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+      <app-input
+        id="universityEmail"
+        placeholder=""
+        label="البريد الجامعى"
+        (valueChange)="onInputChange($event, 'universityEmail')"
+      />
+
+      <app-select-input
+        id="college"
+        label="الكلية"
+        [options]="collegeValues"
+        (valueChange)="onInputChange($event, 'college')"
+      />
+
+      <app-select-input
+        id="grade"
+        label="الفرقة"
+        [options]="gradeValues"
+        (valueChange)="onInputChange($event, 'grade')"
+      />
+
+      <app-input
+        id="major"
+        placeholder=""
+        label="التخصص"
+        (valueChange)="onInputChange($event, 'major')"
+      />
+    </div>
+
+    @if (showRequiredFields) {
+    <div class="alert text-red-600 italic mt-4">
+      الرجاء إدخال رقم الطلب أو رقم جواز السفر للبحث عن الطالب
+    </div>
+    }
+    <!--  -->
+    @if (collegeFieldError) {
+    <div class="alert text-red-600 italic mt-4">
+      يجب ان تكون الكلية قيمة صالحة
+    </div>
+    }
+    <!--  -->
+    @if (isLoading) {
+    <app-loading-spinner />
+    } @else {
+
+    <button
+      type="submit"
+      class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer my-5"
+    >
+      تقييد الطالب
+    </button>
+    }
+  </form>
+</section>

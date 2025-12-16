@@ -1,0 +1,31 @@
+<div class="relative">
+  <label [for]="id()" class="block mb-2 text-sm font-medium text-gray-900">
+    {{ label() }}
+  </label>
+
+  <input
+    type="text"
+    [(ngModel)]="inputValue"
+    (focus)="showDropdown = true"
+    (blur)="onBlur()"
+    (input)="filterOptions()"
+    placeholder="اختر {{ label() }}"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 gray-700 placeholder-gray-400"
+  />
+
+  @if (showDropdown && filteredOptions.length > 0) {
+  <ul
+    class="absolute bg-white border mt-1 w-full z-10 max-h-96 overflow-y-auto"
+  >
+    @for (option of filteredOptions; track $index) {
+
+    <li
+      (mousedown)="selectOption(option)"
+      class="px-2 py-1 hover:bg-gray-100 cursor-pointer border-2 border-gray-200"
+    >
+      {{ option }}
+    </li>
+    }
+  </ul>
+  }
+</div>

@@ -1,0 +1,44 @@
+<section class="bg-white gray-900">
+  <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
+    
+
+    <form (submit)="sendRequest()" [formGroup]="form">
+      <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+        <app-input
+          id="amount"
+          placeholder=""
+          label="المبلغ المطلوب"
+          (valueChange)="onInputChange($event, 'amount')"
+          [control]="getControl('amount')"
+        />
+
+        <app-select-input
+          id="grade"
+          label="الفرقة"
+          [options]="gradeValues"
+          (valueChange)="onInputChange($event, 'grade')"
+          [control]="getControl('grade')"
+        />
+
+        <app-select-input
+          id="admissionYear"
+          label="العام الاكاديمى"
+          [options]="admissionYearValues"
+          (valueChange)="onInputChange($event, 'admissionYear')"
+          [control]="getControl('admissionYear')"
+        />
+      </div>
+
+      @if (isLoading) {
+      <app-loading-spinner />
+      } @else {
+
+      <button
+        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer my-5"
+      >
+        إضافة
+      </button>
+      }
+    </form>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+<aside
+  id="default-sidebar"
+  class="fixed top-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+  aria-label="Sidebar"
+>
+  <div class="h-full px-3 py-4 overflow-y-auto bg-gray-100 gray-800">
+    <ul class="space-y-2 font-medium">
+      <app-button buttonText="الرئيسية" route="createStudent" />
+      <app-button buttonText="البحث و التقارير" route="reports" />
+      <app-button buttonText="إرسال بريد" route="emails" />
+      <app-button buttonText="تقييد الطلاب" route="enrollments" />
+      <app-button buttonText="المتطلبات المالية" route="expenses" />
+      @if (authService.hasAddFeesPermission() || superAdminCheck()) {
+      <app-button buttonText="الخدمات" route="services" />
+      }
+      @if (superAdminCheck()) {
+      <app-button buttonText="المستخدمين" route="users" />
+      }
+
+      <li class="my-3">
+        <a
+          routerLink="/login"
+          (click)="authService.logout()"
+          class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-300 group"
+        >
+          <span class="ms-3">خروج</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>

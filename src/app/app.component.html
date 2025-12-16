@@ -1,0 +1,11 @@
+@if (!isLoginPage()) {
+<app-sidebar />
+<div class="p-4 sm:ms-64">
+  <router-outlet />
+</div>
+} @else {
+
+<div class="p-4">
+  <router-outlet />
+</div>
+}

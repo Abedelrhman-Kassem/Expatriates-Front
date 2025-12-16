@@ -1,0 +1,24 @@
+<button
+  class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer m-5"
+  (click)="goBack()"
+>
+  رجوع
+</button>
+
+<button
+  class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer m-5"
+  (click)="downloadReport()"
+>
+  تقرير
+</button>
+<!--
+<div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+  @if (studentModel !== undefined) {
+
+  @for (label of labels; track $index) {
+
+  <app-disabled-input [label]="label" [value]="values[$index]" />
+  } }
+</div> -->
+
+<app-grid-disabled-inputs [studentModel]="studentModel ?? {}" />
