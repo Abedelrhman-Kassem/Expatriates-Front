@@ -11,6 +11,13 @@
 >
   تقرير
 </button>
+
+<button
+  class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-800 hover:ring-red-800 hover:cursor-pointer m-5"
+  (click)="deleteStudent()"
+>
+  حذف الطالب
+</button>
 <!--
 <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
   @if (studentModel !== undefined) {
@@ -22,3 +29,27 @@
 </div> -->
 
 <app-grid-disabled-inputs [studentModel]="studentModel ?? {}" />
+
+<!-- Delete Confirmation Dialog -->
+@if(showDeleteConfirm){
+<div class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg p-6 w-80 shadow-lg">
+    <h3 class="text-lg font-medium mb-4">تأكيد الحذف</h3>
+    <p class="mb-4">هل أنت متأكد أنك تريد حذف هذا الطالب؟</p>
+    <div class="flex justify-end gap-2">
+      <button
+        (click)="confirmDelete()"
+        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+      >
+        حذف
+      </button>
+      <button
+        (click)="cancelDelete()"
+        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+      >
+        إلغاء
+      </button>
+    </div>
+  </div>
+</div>
+}

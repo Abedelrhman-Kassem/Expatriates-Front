@@ -9,13 +9,8 @@ export type Student = {
   certificateCountry: string | undefined;
   admissionYear: string | undefined;
   exemptionStatus: string | undefined;
-  studentStatus: string | undefined;
-  major: string | undefined;
   birthDate: string | undefined;
-  placeOfResidence: string | undefined;
   email: string | undefined;
-  whatsNumber: string | undefined;
-  number: string | undefined;
   applicationType: string | undefined;
   educationStage: string | undefined;
   educationType: string | undefined;
@@ -42,7 +37,7 @@ export const admissionYearValues: string[] = Array.from(
     const end = new Date().getFullYear() - i;
     const start = end - 1;
     return `${start}/${end}`;
-  }
+  },
 );
 
 export const exemptionStatusValues: string[] = [
@@ -52,7 +47,13 @@ export const exemptionStatusValues: string[] = [
   'معاملة طالب مصري',
 ];
 
-export const studentStatusValues: string[] = ['باقي', 'مستجد'];
+export const studentStatusValues: string[] = [
+  'باقي',
+  'مستجد',
+  'وقف قيد',
+  'خريج',
+  'مفصول',
+];
 
 export const entryTypeValues: string[] = ['مقيد', 'مرشح'];
 
@@ -86,8 +87,14 @@ export const requestTypeValues: string[] = [
   'طلب',
 ];
 
-export const educationTypeValues: string[] = ['ساعات معتمده', 'فصلى'];
+export const educationStageValues: string[] = ['جامعى', 'دراسات'];
 
-export const formatTypeValues: string[] = ['مصري', 'من الخارج'];
+export const educationTypeValues: string[] = [
+  'ساعات معتمده',
+  'فصلى',
+  'نقاط معتمده',
+];
+
+export const formatTypeValues: string[] = ['ثانويه مصريه', 'ثانويه من الخارج'];
 
 export const applicationTypeValues: string[] = ['عادى', 'مصروفات خاصة'];

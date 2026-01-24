@@ -14,6 +14,7 @@ import {
   requestTypeValues,
   collegeValues,
   educationTypeValues,
+  educationStageValues,
   entryTypeValues,
   exemptionStatusValues,
   formatTypeValues,
@@ -47,6 +48,7 @@ export class MainComponent {
   entryTypeValues: string[] = entryTypeValues;
   collegeValues: string[] = collegeValues;
   requestTypeValues: string[] = requestTypeValues;
+  educationStageValues: string[] = educationStageValues;
   educationTypeValues: string[] = educationTypeValues;
   formatTypeValues: string[] = formatTypeValues;
   applicationTypeValues: string[] = applicationTypeValues;
@@ -54,7 +56,7 @@ export class MainComponent {
   isLoading: Signal<boolean> = signal(false);
   constructor(
     public createStudentService: CreateStudentService,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.isLoading = computed(() => this.createStudentService.isLoading());
   }
@@ -83,12 +85,8 @@ export class MainComponent {
     submissionNumber: new FormControl('', [Validators.required]),
     passportNumber: new FormControl('', [Validators.required]),
     idNumber: new FormControl('', [Validators.required]),
-    major: new FormControl(),
     birthDate: new FormControl('', [Validators.required]),
-    placeOfResidence: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    whatsNumber: new FormControl('', [Validators.required]),
-    number: new FormControl('', [Validators.required]),
     educationStage: new FormControl('', [Validators.required]),
     percentage: new FormControl('', [Validators.required]),
 
@@ -111,10 +109,6 @@ export class MainComponent {
     admissionYear: new FormControl('', [
       Validators.required,
       valueInArrayValidator(this.admissionYearValues),
-    ]),
-    studentStatus: new FormControl('', [
-      Validators.required,
-      valueInArrayValidator(this.studentStatusValues),
     ]),
     exemptionStatus: new FormControl('', [
       Validators.required,
@@ -139,7 +133,7 @@ export class MainComponent {
   });
 
   getControl(
-    controlName: keyof typeof this.form.controls
+    controlName: keyof typeof this.form.controls,
   ): FormControl<string | null> {
     return this.form.get(controlName) as FormControl<string | null>;
   }

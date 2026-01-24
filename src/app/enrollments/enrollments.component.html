@@ -3,12 +3,13 @@
     <h2 class="mb-4 text-xl font-bold text-gray-900">تقييد الطلاب</h2>
   </div>
   <form (submit)="sendRequest()" autocomplete="off">
+    <h3 class="mb-4 text-lg font-semibold text-gray-900">البحث عن الطالب</h3>
     <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
       <app-input
-        id="passportNumber"
+        id="name"
         placeholder=""
-        label="رقم جواز السفر"
-        (valueChange)="onInputChange($event, 'passportNumber')"
+        label="الاسم"
+        (valueChange)="onInputChange($event, 'name')"
       />
 
       <app-input
@@ -17,69 +18,164 @@
         label="رقم الطلب"
         (valueChange)="onInputChange($event, 'submissionNumber')"
       />
-
-      <!-- <app-input
-      id="code"
-      placeholder=""
-      label="الكود الجامعى"
-      (valueChange)="onInputChange($event, 'code')"
-      /> -->
-    </div>
-
-    <hr class="my-10" />
-
-    <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
-      <app-input
-        id="universityEmail"
-        placeholder=""
-        label="البريد الجامعى"
-        (valueChange)="onInputChange($event, 'universityEmail')"
-      />
-
-      <app-select-input
-        id="college"
-        label="الكلية"
-        [options]="collegeValues"
-        (valueChange)="onInputChange($event, 'college')"
-      />
-
-      <app-select-input
-        id="grade"
-        label="الفرقة"
-        [options]="gradeValues"
-        (valueChange)="onInputChange($event, 'grade')"
-      />
-
-      <app-input
-        id="major"
-        placeholder=""
-        label="التخصص"
-        (valueChange)="onInputChange($event, 'major')"
-      />
     </div>
 
     @if (showRequiredFields) {
-    <div class="alert text-red-600 italic mt-4">
-      الرجاء إدخال رقم الطلب أو رقم جواز السفر للبحث عن الطالب
-    </div>
+      <div class="alert text-red-600 italic mt-4">
+        الرجاء إدخال الاسم أو رقم الطلب للبحث عن الطالب
+      </div>
     }
-    <!--  -->
-    @if (collegeFieldError) {
-    <div class="alert text-red-600 italic mt-4">
-      يجب ان تكون الكلية قيمة صالحة
-    </div>
-    }
-    <!--  -->
-    @if (isLoading) {
-    <app-loading-spinner />
-    } @else {
 
     <button
-      type="submit"
-      class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer my-5"
+      type="button"
+      (click)="searchStudent()"
+      class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800 hover:cursor-pointer"
     >
-      تقييد الطالب
+      بحث عن الطالب
     </button>
+
+    @if (studentFound) {
+      <hr class="my-10" />
+
+      <h3 class="mb-4 text-lg font-semibold text-gray-900">بيانات الطالب</h3>
+      <div
+        class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3 mb-6 bg-gray-50 p-4 rounded-lg"
+      >
+        <div><strong>الاسم:</strong> {{ foundStudent?.name }}</div>
+        <div>
+          <strong>رقم الطلب:</strong> {{ foundStudent?.submissionNumber }}
+        </div>
+        <div>
+          <strong>رقم جواز السفر:</strong> {{ foundStudent?.passportNumber }}
+        </div>
+        <div><strong>الجنسية:</strong> {{ foundStudent?.nationality }}</div>
+        <div><strong>النوع:</strong> {{ foundStudent?.gender }}</div>
+        <div><strong>البريد الإلكتروني:</strong> {{ foundStudent?.email }}</div>
+      </div>
+
+      <hr class="my-10" />
+
+      <h3 class="mb-4 text-lg font-semibold text-gray-900">بيانات التقييد</h3>
+      @if (isStudentEnrolled) {
+        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded-lg">
+          <strong>حالة الطالب:</strong> مقيد بالفعل - يمكنك تعديل البيانات أو
+          إلغاء التقييد
+        </div>
+      }
+      <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+        <app-input
+          id="universityEmail"
+          placeholder=""
+          label="البريد الجامعى"
+          [initialValue]="inputValues['universityEmail'] || ''"
+          (valueChange)="onInputChange($event, 'universityEmail')"
+        />
+
+        <app-select-input
+          id="college"
+          label="الكلية"
+          [options]="collegeValues"
+          [disabled]="isCollegeAdmin || isStudentEnrolled"
+          [initialValue]="inputValues['college'] || ''"
+          (valueChange)="onInputChange($event, 'college')"
+        />
+
+        <app-select-input
+          id="grade"
+          label="الفرقة"
+          [options]="gradeValues"
+          [initialValue]="inputValues['grade'] || ''"
+          (valueChange)="onInputChange($event, 'grade')"
+        />
+
+        <app-input
+          id="major"
+          placeholder=""
+          label="التخصص"
+          [initialValue]="inputValues['major'] || ''"
+          (valueChange)="onInputChange($event, 'major')"
+        />
+
+        <app-select-input
+          id="studentStatus"
+          label="حالة الطالب"
+          [options]="studentStatusValues"
+          [initialValue]="inputValues['studentStatus'] || ''"
+          (valueChange)="onInputChange($event, 'studentStatus')"
+        />
+
+        <app-input
+          id="placeOfResidence"
+          placeholder=""
+          label="محل الإقامة"
+          [initialValue]="inputValues['placeOfResidence'] || ''"
+          (valueChange)="onInputChange($event, 'placeOfResidence')"
+        />
+
+        <app-input
+          id="whatsNumber"
+          placeholder=""
+          label="رقم الواتس"
+          [initialValue]="inputValues['whatsNumber'] || ''"
+          (valueChange)="onInputChange($event, 'whatsNumber')"
+        />
+
+        <app-input
+          id="number"
+          placeholder=""
+          label="رقم الموبايل"
+          [initialValue]="inputValues['number'] || ''"
+          (valueChange)="onInputChange($event, 'number')"
+        />
+      </div>
+
+      @if (collegeFieldError) {
+        <div class="alert text-red-600 italic mt-4">
+          يجب ان تكون الكلية قيمة صالحة
+        </div>
+      }
+      @if (isLoading) {
+        <app-loading-spinner />
+      } @else {
+        @if (isStudentEnrolled) {
+          <!-- Enrolled student: Show Update and Unenroll buttons -->
+          <div class="flex gap-4 mt-4">
+            <button
+              type="button"
+              (click)="updateStudent()"
+              class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:cursor-pointer"
+            >
+              حفظ التعديلات
+            </button>
+            <button
+              type="button"
+              (click)="openUnenrollModal()"
+              class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-700 hover:cursor-pointer"
+            >
+              إلغاء التقييد
+            </button>
+          </div>
+        } @else {
+          <!-- Not enrolled: Show Enroll button -->
+          <button
+            type="submit"
+            class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer my-5"
+          >
+            تقييد الطالب
+          </button>
+        }
+      }
     }
   </form>
+
+  <!-- Unenroll Confirmation Modal -->
+  <app-confirm-modal
+    [isOpen]="showUnenrollModal"
+    title="إلغاء تقييد الطالب"
+    message="هل أنت متأكد من إلغاء تقييد هذا الطالب؟ سيتم إزالة الطالب من الكلية وستحتاج إلى إعادة تقييده مرة أخرى."
+    confirmText="إلغاء التقييد"
+    cancelText="تراجع"
+    (confirmed)="confirmUnenroll()"
+    (cancelled)="closeUnenrollModal()"
+  />
 </section>

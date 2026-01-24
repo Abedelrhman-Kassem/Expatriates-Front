@@ -45,52 +45,7 @@
         required
       />
     </div>
-    <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <label class="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          [(ngModel)]="admin.addNominations"
-          name="addNominations"
-          class="accent-blue-600"
-        />
-        <span>إضافة ترشيحات</span>
-      </label>
-      <label class="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          [(ngModel)]="admin.viewPrintReports"
-          name="viewPrintReports"
-          class="accent-blue-600"
-        />
-        <span>عرض/طباعة التقارير</span>
-      </label>
-      <label class="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          [(ngModel)]="admin.addFees"
-          name="addFees"
-          class="accent-blue-600"
-        />
-        <span>إضافة رسوم</span>
-      </label>
-      <label class="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          [(ngModel)]="admin.addEnrollmentData"
-          name="addEnrollmentData"
-          class="accent-blue-600"
-        />
-        <span>إضافة بيانات القيد</span>
-      </label>
-      <label class="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          [(ngModel)]="admin.printPermissions"
-          name="printPermissions"
-          class="accent-blue-600"
-        />
-        <span>تصاريح الطباعة</span>
-      </label>
+    <div class="mb-4">
       <label class="flex items-center space-x-2">
         <input
           type="checkbox"
@@ -98,8 +53,90 @@
           name="superAdmin"
           class="accent-blue-600"
         />
-        <span>مدير عام</span>
+        <span class="font-bold">مدير عام للنظام (Full Access)</span>
       </label>
+    </div>
+
+    <!-- Roles -->
+    <div class="mb-4 border p-4 rounded-lg bg-gray-50">
+      <label class="block mb-2 font-bold text-lg border-b pb-2"
+        >الأدوار (Roles)</label
+      >
+      <div class="grid grid-cols-1 gap-2">
+        @for(role of availableRoles; track role.id) {
+        <label
+          class="flex items-center space-x-2 p-2 bg-white border rounded hover:bg-blue-50 cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            [checked]="isRoleSelected(role.id)"
+            (change)="toggleRole(role.id)"
+            class="accent-blue-600 ml-2 h-5 w-5"
+          />
+          <div class="flex flex-col">
+            <span class="font-bold text-gray-800">{{ role.name }}</span>
+            <span class="text-xs text-gray-500">{{ role.description }}</span>
+          </div>
+        </label>
+        } @empty {
+        <div class="text-gray-500">لا توجد أدوار متاحة</div>
+        }
+      </div>
+    </div>
+
+    <!-- College Input (Only if College Admin role selected) -->
+    @if (isCollegeAdminSelected()) {
+    <div class="mb-4">
+      <label class="block mb-2 text-gray-700">الكلية</label>
+      <select
+        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+        [(ngModel)]="admin.college"
+        name="college"
+        required
+      >
+        <option [ngValue]="null" disabled>اختر الكلية</option>
+        @for(college of collegeValues; track college) {
+        <option [value]="college">{{ college }}</option>
+        }
+      </select>
+    </div>
+    }
+
+    <!-- Direct Permissions -->
+    <div class="mb-4 border p-4 rounded-lg bg-gray-50">
+      <label class="block mb-2 font-bold text-lg border-b pb-2"
+        >صلاحيات إضافية (Direct Permissions)</label
+      >
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        @for(perm of availablePermissions; track perm.id) {
+        <label
+          class="flex items-center space-x-2 p-2 bg-white border rounded hover:bg-blue-50 cursor-pointer"
+          [class.opacity-75]="isPermissionInRoles(perm.id)"
+          [class.bg-gray-100]="isPermissionInRoles(perm.id)"
+        >
+          <input
+            type="checkbox"
+            [checked]="
+              isPermissionSelected(perm.id) || isPermissionInRoles(perm.id)
+            "
+            [disabled]="isPermissionInRoles(perm.id)"
+            (change)="togglePermission(perm.id)"
+            class="accent-blue-600 ml-2 h-4 w-4"
+          />
+          <div class="flex flex-col">
+            <span class="font-bold text-sm text-gray-800">{{ perm.name }}</span>
+            <span class="text-xs text-gray-500">{{ perm.description }}</span>
+            @if(isPermissionInRoles(perm.id)) {
+            <span class="text-[10px] text-blue-600 font-semibold"
+              >(مضمن في الدور)</span
+            >
+            }
+          </div>
+        </label>
+        } @empty {
+        <div class="text-gray-500">لا توجد صلاحيات متاحة</div>
+        }
+      </div>
     </div>
     <button
       type="submit"

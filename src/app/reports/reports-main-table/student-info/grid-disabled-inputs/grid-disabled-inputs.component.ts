@@ -20,7 +20,9 @@ export class GridDisabledInputsComponent implements OnInit {
         key === 'createdAt' ||
         key === 'updatedAt' ||
         key === 'id' ||
-        key === 'requirements'
+        key === 'requirements' ||
+        key === 'collegeId' ||
+        key === 'college_id'
       ) {
         continue;
       }

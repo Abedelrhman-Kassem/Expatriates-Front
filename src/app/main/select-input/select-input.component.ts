@@ -1,23 +1,33 @@
-import { Component, effect, input, output } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, input, output, OnInit } from '@angular/core';
+import { FormControl, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-select-input',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule],
   templateUrl: './select-input.component.html',
   styleUrl: './select-input.component.css',
 })
-export class SelectInputComponent {
+export class SelectInputComponent implements OnInit {
   id = input.required<string>();
   label = input.required<string>();
   options = input.required<string[]>();
-  control = input<FormControl<string | null>>(new FormControl(''));
+  control = input<FormControl<string | null>>();
+  disabled = input<boolean>(false);
+  initialValue = input<string>('');
   valueChange = output<string>();
 
   inputValue = '';
   filteredOptions: string[] = [];
   showDropdown = false;
+
+  ngOnInit() {
+    const initial = this.initialValue();
+    if (initial) {
+      this.inputValue = initial;
+      this.valueChange.emit(initial);
+    }
+  }
 
   constructor() {
     effect(() => {
@@ -36,7 +46,7 @@ export class SelectInputComponent {
 
     const val = this.inputValue.toLowerCase();
     this.filteredOptions = this.options().filter((opt) =>
-      this.normalizeArabic(opt).includes(val)
+      this.normalizeArabic(opt).includes(val),
     );
   }
 

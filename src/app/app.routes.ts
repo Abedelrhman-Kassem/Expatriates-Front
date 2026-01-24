@@ -7,10 +7,13 @@ import { StudentInfoComponent } from './reports/reports-main-table/student-info/
 import { MainSearchComponent } from './reports/main-search/main-search.component';
 import { EnrollmentsComponent } from './enrollments/enrollments.component';
 import { ExpensesComponent } from './expenses/expenses.component';
-import { SetRequirementsComponent } from './expenses/set-requirements/set-requirements.component';
-import { PayInstallmentsComponent } from './expenses/pay-installments/pay-installments.component';
+import { StudentExpensesComponent } from './expenses/student-expenses/student-expenses.component';
 import { OverviewComponent } from './expenses/overview/overview.component';
-import { authGuard, superAdminGuard } from './login/auth.guard';
+import {
+  authGuard,
+  superAdminGuard,
+  permissionGuard,
+} from './login/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { UsersComponent } from './users/users.component';
 import { UserOverviewComponent } from './users/user-overview/user-overview.component';
@@ -18,6 +21,7 @@ import { UserComponent } from './users/user/user.component';
 import { ServicesOverviewComponent } from './services/overview/overview.component';
 import { ServiceFormComponent } from './services/form/form.component';
 import { StudentSearchComponent } from './student-search/student-search.component';
+import { CollegeExpensesManagementComponent } from './admin/college-expenses-management/college-expenses-management.component';
 
 export const routes: Routes = [
   {
@@ -45,7 +49,7 @@ export const routes: Routes = [
     path: 'reports',
     component: ReportsComponent,
     title: 'التقارير',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard(['view_search'])],
     children: [
       {
         path: '',
@@ -60,31 +64,27 @@ export const routes: Routes = [
   {
     path: 'emails',
     component: EmailsComponent,
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard(['send_emails'])],
   },
   {
     path: 'enrollments',
     component: EnrollmentsComponent,
     title: 'الاشتراكات',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard(['manage_enrollments'])],
   },
   {
     path: 'expenses',
     component: ExpensesComponent,
     title: 'المدفوعات',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard(['manage_expenses'])],
     children: [
       {
         path: '',
         component: OverviewComponent,
       },
       {
-        path: 'set-expenses/:id',
-        component: SetRequirementsComponent,
-      },
-      {
-        path: 'pay-installments/:id',
-        component: PayInstallmentsComponent,
+        path: 'student/:id',
+        component: StudentExpensesComponent,
       },
     ],
   },
@@ -92,30 +92,31 @@ export const routes: Routes = [
     path: 'services/add',
     component: ServiceFormComponent,
     title: 'إضافة خدمة',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard(['manage_services'])],
   },
   {
     path: 'services/edit/:id',
     component: ServiceFormComponent,
     title: 'تعديل خدمة',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard(['manage_services'])],
   },
   {
     path: 'studentServices/:studentMode/:studentId',
     component: ServicesOverviewComponent,
     title: 'الخدمات',
+    canActivate: [authGuard, permissionGuard(['pay_services'])],
   },
   {
     path: 'services',
     component: ServicesOverviewComponent,
     title: 'الخدمات',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard(['manage_services'])],
   },
   {
     path: 'users',
     component: UsersComponent,
     title: 'المستخدمين',
-    canActivate: [authGuard, superAdminGuard],
+    canActivate: [authGuard, permissionGuard(['manage_users'])],
     children: [
       {
         path: '',
@@ -130,6 +131,12 @@ export const routes: Routes = [
         component: UserComponent,
       },
     ],
+  },
+  {
+    path: 'college-expenses',
+    component: CollegeExpensesManagementComponent,
+    title: 'مصروفات الكليات',
+    canActivate: [authGuard, permissionGuard(['manage_college_expenses'])],
   },
 
   {

@@ -66,6 +66,10 @@ export default class ReportsService {
       responseType: 'blob',
     });
   }
+
+  deleteStudent(id: string) {
+    return this.httpClient.delete(baseUrl + 'students/' + id);
+  }
 }
 
 export interface StudentModel {

@@ -10,11 +10,12 @@
       <app-button buttonText="إرسال بريد" route="emails" />
       <app-button buttonText="تقييد الطلاب" route="enrollments" />
       <app-button buttonText="المتطلبات المالية" route="expenses" />
-      @if (authService.hasAddFeesPermission() || superAdminCheck()) {
+      @if (authService.hasPermission('manage_services')) {
       <app-button buttonText="الخدمات" route="services" />
-      }
-      @if (superAdminCheck()) {
+      } @if (authService.hasPermission('manage_users')) {
       <app-button buttonText="المستخدمين" route="users" />
+      } @if (authService.hasPermission('manage_college_expenses')) {
+      <app-button buttonText="مصروفات الكليات" route="college-expenses" />
       }
 
       <li class="my-3">

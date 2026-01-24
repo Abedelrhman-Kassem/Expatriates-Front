@@ -18,7 +18,7 @@ export interface RequirementsModel {
   id?: number;
   studentId?: number;
   updatedAt?: string;
-  installments?: InstallmentsModel[];
+  legacyInstallments?: InstallmentsModel[];
 }
 
 export interface InstallmentsModel {

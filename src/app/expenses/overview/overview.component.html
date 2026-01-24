@@ -1,9 +1,6 @@
 <section class="bg-white gray-900">
   <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
     <h2 class="mb-4 text-xl font-bold text-gray-900">المتطلبات المالية</h2>
-    <h2 class="mb-4 text-xl font-bold text-gray-900">
-      يجب ان يكون الطالب مقيد
-    </h2>
   </div>
   <div class="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
     <app-input
@@ -26,6 +23,13 @@
       label="رقم الطلب"
       (valueChange)="onInputChange($event, 'submissionNumber')"
     />
+
+    <app-input
+      id="passportNumber"
+      placeholder=""
+      label="رقم جواز السفر"
+      (valueChange)="onInputChange($event, 'passportNumber')"
+    />
   </div>
   @if (isLoading) {
   <app-loading-spinner />
@@ -43,16 +47,9 @@
 
   <button
     class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer m-5"
-    [routerLink]="['set-expenses/', student().id]"
+    [routerLink]="['student/', student().id]"
   >
-    إضافة مصروفات
-  </button>
-
-  <button
-    class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-200 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer m-5"
-    [routerLink]="['pay-installments/', student().id]"
-  >
-    سداد أقساط
+    إدارة مصروفات الطالب
   </button>
 
   <button

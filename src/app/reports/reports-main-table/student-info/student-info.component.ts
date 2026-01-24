@@ -21,6 +21,9 @@ export class StudentInfoComponent implements OnInit {
   location: Location = inject(Location);
   toastr: ToastrService = inject(ToastrService);
 
+  // Delete dialog state
+  showDeleteConfirm = false;
+
   goBack(): void {
     this.location.back();
   }
@@ -51,5 +54,44 @@ export class StudentInfoComponent implements OnInit {
         this.toastr.success('تم تحميل التقرير بنجاح');
       },
     });
+  }
+
+  // Open custom confirmation dialog
+  openDeleteConfirm() {
+    this.showDeleteConfirm = true;
+  }
+
+  confirmDelete() {
+    this.reportsService.deleteStudent(this.id()).subscribe({
+      next: () => {
+        // Remove student from the array
+        const currentResult = this.reportsService.reportResult();
+        const updatedItems = currentResult.items.filter(
+          (student) => student.id?.toString() !== this.id()
+        );
+
+        this.reportsService.reportResult.set({
+          ...currentResult,
+          items: updatedItems,
+          totalItems: currentResult.totalItems - 1,
+        });
+
+        this.toastr.success('تم حذف الطالب بنجاح');
+        this.goBack();
+      },
+      error: (error) => {
+        this.toastr.error(error.error.message || 'حدث خطأ أثناء حذف الطالب');
+      },
+    });
+    this.showDeleteConfirm = false;
+  }
+
+  cancelDelete() {
+    this.showDeleteConfirm = false;
+  }
+
+  // Called from template when delete button is clicked
+  deleteStudent() {
+    this.openDeleteConfirm();
   }
 }

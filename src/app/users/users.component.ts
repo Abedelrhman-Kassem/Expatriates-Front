@@ -5,16 +5,36 @@ import { UsersService } from './users.service';
 import { RouterOutlet } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
+export interface Permission {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export interface Role {
+  id: number;
+  name: string;
+  description: string;
+  permissions?: Permission[];
+}
+
 export interface Admin {
   id?: number;
   username?: string;
   name?: string;
-  addNominations?: boolean;
-  viewPrintReports?: boolean;
-  addFees?: boolean;
-  addEnrollmentData?: boolean;
-  printPermissions?: boolean;
+  password?: string;
   superAdmin?: boolean;
+  adminType?: 'system' | 'college';
+  college?: string;
+
+  // RBAC Relations
+  roles?: Role[];
+  directPermissions?: Permission[];
+
+  // For forms
+  roleIds?: number[];
+  permissionIds?: number[];
+
   createdAt?: string;
   updatedAt?: string;
 }

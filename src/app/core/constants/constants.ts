@@ -1,9 +1,9 @@
-export const baseUrl: string =
-  'https://expatriates-backend-production.up.railway.app/api/protected/';
-export const loginUrl: string =
-  'https://expatriates-backend-production.up.railway.app/api/';
-// export const baseUrl: string = 'http://localhost:3000/api/protected/';
-// export const loginUrl: string = 'http://localhost:3000/api/';
+// export const baseUrl: string =
+//   'https://expatriates-backend-production.up.railway.app/api/protected/';
+// export const loginUrl: string =
+//   'https://expatriates-backend-production.up.railway.app/api/';
+export const baseUrl: string = 'http://localhost:3000/api/protected/';
+export const loginUrl: string = 'http://localhost:3000/api/';
 
 export const studentLabels = {
   name: 'الاسم',

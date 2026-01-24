@@ -1,0 +1,345 @@
+<section class="bg-white p-6" dir="rtl">
+  <div class="mx-auto max-w-screen-xl">
+    @if (isLoading()) {
+    <app-loading-spinner />
+    } @else if (expensesData()) {
+    <!-- Student Info Header -->
+    <div class="mb-6 border-b pb-4">
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">
+        مصروفات الطالب: {{ expensesData()!.student.name }}
+      </h2>
+      <div class="flex flex-wrap gap-4 text-sm text-gray-600">
+        <span>رقم الطلب: {{ expensesData()!.student.submissionNumber }}</span>
+        <span>الكلية: {{ expensesData()!.student.college }}</span>
+        <span>سنة القبول: {{ expensesData()!.student.admissionYear }}</span>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+        <div class="text-sm text-blue-600 mb-1">الإجمالي المستحق</div>
+        <div class="text-2xl font-bold text-blue-800">
+          {{ formatCurrency(expensesData()!.summary.totalRequired) }}
+        </div>
+      </div>
+      <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+        <div class="text-sm text-green-600 mb-1">إجمالي المدفوع</div>
+        <div class="text-2xl font-bold text-green-800">
+          {{ formatCurrency(expensesData()!.summary.totalPaid) }}
+        </div>
+      </div>
+      <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+        <div class="text-sm text-red-600 mb-1">المتأخر</div>
+        <div class="text-2xl font-bold text-red-800">
+          {{ formatCurrency(expensesData()!.summary.totalRemaining) }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Year Sections -->
+    @for (yearSection of expensesData()!.yearSections; track yearSection.year) {
+    <div class="mb-6 border rounded-lg shadow-sm">
+      <!-- Year Header -->
+      <div class="bg-gray-100 px-4 py-3 rounded-t-lg flex justify-between items-center">
+        <h3 class="text-lg font-semibold text-gray-800">
+          العام الأكاديمي: {{ yearSection.year }}
+        </h3>
+        @if (!isYearEditing(yearSection.year)) {
+        <button
+          (click)="startEditYear(yearSection)"
+          class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+        >
+          تعديل
+        </button>
+        }
+      </div>
+
+      <div class="p-4">
+        <!-- Year Info / Edit Form -->
+        @if (isYearEditing(yearSection.year)) {
+        <!-- Edit Mode -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">المستحق</label>
+              <div class="flex gap-2">
+                <input
+                  type="number"
+                  [value]="getEditingAmount() ?? yearSection.collegeDefault"
+                  (input)="onYearAmountChange($any($event.target).value)"
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+                @if (getEditingAmount() !== null) {
+                <button
+                  (click)="resetToDefault()"
+                  class="px-3 py-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-lg"
+                  title="العودة للمبلغ الافتراضي"
+                >
+                  افتراضي
+                </button>
+                }
+              </div>
+              <p class="text-xs text-gray-500 mt-1">
+                المبلغ الافتراضي: {{ formatCurrency(yearSection.collegeDefault) }}
+              </p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">الحالة</label>
+              <select
+                (change)="onYearStatusChange($any($event.target).value)"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                @for (status of studentStatusValues; track status) {
+                <option [value]="status" [selected]="status === getEditingStatus()">{{ status }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button
+              (click)="saveYearChanges()"
+              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            >
+              حفظ
+            </button>
+            <button
+              (click)="cancelEditYear()"
+              class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+            >
+              إلغاء
+            </button>
+          </div>
+        </div>
+        } @else {
+        <!-- View Mode -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 bg-gray-50 p-4 rounded-lg">
+          <div>
+            <span class="text-sm text-gray-500">المستحق:</span>
+            <div class="font-semibold text-gray-800">
+              {{ formatCurrency(yearSection.requiredAmount) }}
+              @if (yearSection.isCustomAmount) {
+              <span class="text-xs text-yellow-600">(مخصص)</span>
+              }
+            </div>
+          </div>
+          <div>
+            <span class="text-sm text-gray-500">المدفوع:</span>
+            <div class="font-semibold text-green-700">
+              {{ formatCurrency(yearSection.paidAmount) }}
+            </div>
+          </div>
+          <div>
+            <span class="text-sm text-gray-500">المتبقي:</span>
+            <div class="font-semibold" [class]="yearSection.remainingAmount > 0 ? 'text-red-600' : 'text-green-600'">
+              {{ formatCurrency(yearSection.remainingAmount) }}
+            </div>
+          </div>
+          <div>
+            <span class="text-sm text-gray-500">الحالة:</span>
+            <div class="font-semibold text-gray-800">
+              {{ yearSection.studentStatus }}
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Installments Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-right text-gray-700">
+            <thead class="text-xs text-gray-600 uppercase bg-gray-100">
+              <tr>
+                <th class="px-4 py-3">المبلغ</th>
+                <th class="px-4 py-3">رقم الإيصال</th>
+                <th class="px-4 py-3">نوع الإيصال</th>
+                <th class="px-4 py-3">تاريخ السداد</th>
+                <th class="px-4 py-3">تم السداد</th>
+                <th class="px-4 py-3">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (installment of yearSection.installments; track installment.id) {
+              <tr 
+                class="border-b"
+                [class]="installment.isPaid ? 'bg-green-50' : 'bg-white hover:bg-gray-50'"
+              >
+                <td class="px-4 py-3 font-medium">
+                  {{ formatCurrency(installment.amount) }}
+                </td>
+                <td class="px-4 py-3">
+                  @if (installment.isPaid) {
+                  <span class="text-gray-700">{{ installment.receiptNumber || '-' }}</span>
+                  } @else {
+                  <input
+                    type="text"
+                    [value]="installment.receiptNumber || ''"
+                    (blur)="updateInstallment(installment, 'receiptNumber', $any($event.target).value)"
+                    class="w-24 px-2 py-1 border border-gray-300 rounded text-sm"
+                    placeholder="رقم الإيصال"
+                  />
+                  }
+                </td>
+                <td class="px-4 py-3">
+                  @if (installment.isPaid) {
+                  <span class="text-gray-700">{{ installment.receiptType || '-' }}</span>
+                  } @else {
+                  <select
+                    (change)="updateInstallment(installment, 'receiptType', $any($event.target).value)"
+                    class="px-2 py-1 border border-gray-300 rounded text-sm"
+                  >
+                    <option value="" [selected]="!installment.receiptType">اختر النوع</option>
+                    @for (type of receiptTypeValues; track type) {
+                    <option [value]="type" [selected]="installment.receiptType === type">{{ type }}</option>
+                    }
+                  </select>
+                  }
+                </td>
+                <td class="px-4 py-3">
+                  {{ formatDate(installment.paymentDate) }}
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center justify-center">
+                    @if (installment.isPaid) {
+                    <span class="text-green-600 font-medium">✓ تم السداد</span>
+                    } @else {
+                    <input
+                      type="checkbox"
+                      [checked]="installment.isPaid"
+                      (change)="updateInstallment(installment, 'isPaid', $any($event.target).checked)"
+                      class="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2 cursor-pointer"
+                    />
+                    }
+                  </div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex gap-2">
+                    <button
+                      (click)="printInstallment(installment)"
+                      class="text-blue-600 hover:text-blue-800 text-xs"
+                      title="طباعة إذن دفع"
+                    >
+                      طباعة
+                    </button>
+                    @if (!installment.isPaid) {
+                    <button
+                      (click)="confirmDeleteInstallment(installment.id!)"
+                      class="text-red-600 hover:text-red-800 text-xs"
+                      title="حذف"
+                    >
+                      حذف
+                    </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="6" class="px-4 py-3 text-center text-gray-500">
+                  لا توجد أذونات دفع لهذا العام
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Add Installment Button -->
+        @if (yearSection.canAddInstallment) {
+        <div class="mt-4">
+          <button
+            (click)="openAddInstallmentModal(yearSection)"
+            class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 text-sm"
+          >
+            + إضافة إذن دفع
+          </button>
+        </div>
+        } @else {
+        <div class="mt-4 text-sm text-gray-500">
+          لا يمكن إضافة إذن دفع (حالة الطالب: {{ yearSection.studentStatus }})
+        </div>
+        }
+      </div>
+    </div>
+    }
+    } @else {
+    <div class="text-center text-gray-500 py-8">
+      لا توجد بيانات للطالب
+    </div>
+    }
+  </div>
+</section>
+
+<!-- Add Installment Modal -->
+@if (showAddInstallmentModal()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" dir="rtl">
+  <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+    <div class="px-6 py-4 border-b">
+      <h3 class="text-lg font-semibold text-gray-800">إضافة إذن دفع جديد</h3>
+    </div>
+    <div class="p-6">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">العام الأكاديمي</label>
+        <input
+          type="text"
+          [value]="addInstallmentYear()"
+          readonly
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">المبلغ</label>
+        <input
+          type="number"
+          [value]="addInstallmentAmount()"
+          (input)="onAddInstallmentAmountChange($any($event.target).value)"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+          min="0"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">نوع الإيصال</label>
+        <select
+          (change)="onAddInstallmentReceiptTypeChange($any($event.target).value)"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+        >
+          @for (type of receiptTypeValues; track type) {
+          <option [value]="type" [selected]="addInstallmentReceiptType() === type">{{ type }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="px-6 py-4 border-t flex justify-end gap-2">
+      <button
+        (click)="closeAddInstallmentModal()"
+        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+        [disabled]="addInstallmentSubmitting()"
+      >
+        إلغاء
+      </button>
+      <button
+        (click)="submitAddInstallment()"
+        class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700"
+        [disabled]="addInstallmentSubmitting()"
+      >
+        @if (addInstallmentSubmitting()) {
+        <span class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        } @else {
+        إضافة
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Delete Confirmation Modal -->
+<app-confirm-modal
+  [isOpen]="showDeleteModal()"
+  title="تأكيد الحذف"
+  message="هل أنت متأكد من حذف إذن الدفع هذا؟ لا يمكن التراجع عن هذا الإجراء."
+  confirmText="حذف"
+  cancelText="إلغاء"
+  [isSubmitting]="deleteModalSubmitting()"
+  (confirmed)="executeDelete()"
+  (cancelled)="cancelDelete()"
+/>

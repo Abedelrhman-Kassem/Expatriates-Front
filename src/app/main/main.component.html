@@ -76,27 +76,11 @@
         />
 
         <app-select-input
-          id="studentStatus"
-          label="حالة الطالب"
-          [options]="studentStatusValues"
-          (valueChange)="onInputChange($event, 'studentStatus')"
-          [control]="getControl('studentStatus')"
-        />
-
-        <app-select-input
           id="exemptionStatus"
           label="موقف الطالب من الرسوم"
           [options]="exemptionStatusValues"
           (valueChange)="onInputChange($event, 'exemptionStatus')"
           [control]="getControl('exemptionStatus')"
-        />
-
-        <app-input
-          id="major"
-          placeholder=""
-          label="التخصص"
-          (valueChange)="onInputChange($event, 'major')"
-          [control]="getControl('major')"
         />
 
         <app-input
@@ -109,35 +93,11 @@
         />
 
         <app-input
-          id="placeOfResidence"
-          placeholder=""
-          label="محل الإقامه"
-          (valueChange)="onInputChange($event, 'placeOfResidence')"
-          [control]="getControl('placeOfResidence')"
-        />
-
-        <app-input
           id="email"
           placeholder=""
           label="البريد الإلكتروني"
           (valueChange)="onInputChange($event, 'email')"
           [control]="getControl('email')"
-        />
-
-        <app-input
-          id="whatsNumber"
-          placeholder=""
-          label="رقم الواتس"
-          (valueChange)="onInputChange($event, 'whatsNumber')"
-          [control]="getControl('whatsNumber')"
-        />
-
-        <app-input
-          id="number"
-          placeholder=""
-          label="رقم الموبايل"
-          (valueChange)="onInputChange($event, 'number')"
-          [control]="getControl('number')"
         />
 
         <app-select-input
@@ -156,10 +116,10 @@
           [control]="getControl('applicationType')"
         />
 
-        <app-input
+        <app-select-input
           id="educationStage"
-          placeholder=""
           label="المرحله الدراسيه"
+          [options]="educationStageValues"
           (valueChange)="onInputChange($event, 'educationStage')"
           [control]="getControl('educationStage')"
         />
@@ -189,15 +149,14 @@
         />
       </div>
       @if (isLoading()) {
-
-      <app-loading-spinner />
+        <app-loading-spinner />
       } @else {
-      <button
-        type="submit"
-        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-900 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer"
-      >
-        إضاقه
-      </button>
+        <button
+          type="submit"
+          class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg focus:ring-4 focus:ring-cyan-900 hover:bg-cyan-800 hover:ring-cyan-800 hover:cursor-pointer"
+        >
+          إضاقه
+        </button>
       }
     </form>
   </div>

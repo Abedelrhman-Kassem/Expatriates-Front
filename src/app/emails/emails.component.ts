@@ -3,7 +3,7 @@ import { InputComponent } from '../reports/input/input.component';
 import { SelectInputComponent } from '../main/select-input/select-input.component';
 import { StudentModel } from '../reports/reports.service';
 import { CountriesService } from '../core/services/coutries.service';
-import { genderValues } from '../main/types.module';
+import { collegeValues } from '../main/types.module';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   FormControl,
@@ -24,7 +24,7 @@ export class EmailsComponent {
   emailModel: StudentModel = {};
   countriesService = inject(CountriesService);
   countries = this.countriesService.countries;
-  genderValues: string[] = genderValues;
+  collegeValues: string[] = collegeValues;
   toastr: ToastrService = inject(ToastrService);
 
   http = inject(HttpClient);
