@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingSpinnerComponent } from '../../core/components/loading-spinner/loading-spinner.component';
@@ -12,7 +12,7 @@ import { PublicService } from '../../core/services/public.service';
 @Component({
   selector: 'app-services-overview',
   standalone: true,
-  imports: [CommonModule, RouterLink, LoadingSpinnerComponent],
+  imports: [RouterLink, LoadingSpinnerComponent],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.css',
 })

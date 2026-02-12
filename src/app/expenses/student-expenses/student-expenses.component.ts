@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingSpinnerComponent } from '../../core/components/loading-spinner/loading-spinner.component';
@@ -16,12 +16,11 @@ import { studentStatusValues } from '../../main/types.module';
   selector: 'app-student-expenses',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     LoadingSpinnerComponent,
-    ConfirmModalComponent,
-  ],
+    ConfirmModalComponent
+],
   templateUrl: './student-expenses.component.html',
   styleUrl: './student-expenses.component.css',
 })

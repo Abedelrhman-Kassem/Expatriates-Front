@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { PublicService } from '../core/services/public.service';
@@ -7,7 +7,7 @@ import { PublicService } from '../core/services/public.service';
 @Component({
   selector: 'app-student-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './student-search.component.html',
   styleUrl: './student-search.component.css',
 })
